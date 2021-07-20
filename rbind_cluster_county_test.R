@@ -140,5 +140,5 @@ results=foreach(county_name=counties)%dopar%{#parally processing the pixel data 
 }
 results_final=do.call(rbind,results)#combine the pixel associated with each county
 print("write the csv")
-final_csv=arrange(results_final, desc(cluster_no))#sort the data based on cluster no
+final_csv=arrange(results_final, desc(as.numeric(as.character(cluster_no))))#I changed this code
 write.csv(final_csv,"/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/county_csv/Sorted_Sierra_Nevada.csv")
