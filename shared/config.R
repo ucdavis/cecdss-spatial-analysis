@@ -5,7 +5,6 @@ load_libraries <- function(){
   library(rgdal)
   library(parallel)
   library(maptools)
-  library(foreign)
  
 }
 
@@ -15,7 +14,5 @@ data_dir ="/gpfs/data1/cmongp/ujjwal/cec/Forest Data/" # This is the directory w
 setup <- function(num_clusters=10){
   load_libraries()
   rasterOptions(maxmemory = 10e+9, chunksize = 10e+08) # comment this out if the machine is not powerful enough
-  setwd("/gpfs/data1/cmongp/ujjwal/cec/Forest Data/")# set to your own directory, which your data is located 
+  setwd(data_dir)# set to your own directory, which your data is located 
 }
-
-

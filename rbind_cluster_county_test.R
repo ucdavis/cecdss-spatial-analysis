@@ -10,12 +10,12 @@ library(sqldf)
 library(dplyr)
 registerDoMC(21)
 
-#source here indicates that we can reuse some functions that were written in other script
-source("/gpfs/data1/cmongp/lansong/cec_lan/cec_utils.R")# some functions will be used in this script
-source("/gpfs/data1/cmongp/lansong/cec_lan/config.R")#for set up the working directory
-source("/gpfs/data1/cmongp/lansong/cec_lan/forest_type.R")# useless
-source("/gpfs/data1/cmongp/lansong/cec_lan/data.R")# useless
-source("/gpfs/data1/cmongp/lansong/cec_lan/cluster_results_new.R")#useless
+# source here indicates that we can reuse some functions that were written in other scripts stored in the shared folder.
+source("shared/cec_utils.R")# some functions will be used in this script
+source("shared/config.R")# set up the working directory and expose root_dir and data_dir variables
+source("shared/forest_type.R")# useless
+source("shared/data.R")# useless
+source("shared/cluster_results_new.R")#useless
 
 # loads F3 forest, elevation, sit raster,stack all F3 forest data with sit data,and chwrite.csv(final_csv,"/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/county_csv/Sorted_Sierra_Nevada.csv")ange the variable name to simple name
 load_forest_data <- function(){
@@ -35,7 +35,7 @@ load_forest_data <- function(){
 # write elevation data for the counties in whole Sierra Nevada and extract the values of biomass from F3 data, write elevation, county name, and biomass values for all the pixels in Sierra Nevada
 write_ele_biomass_in_county = function(){
   log("read the forest elevation in whole Sierra Nevada")
-  fl.ele.mask <<-raster("/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/new_test/fl_ele_Sierra.tif")# this is the new forest elevation data in Sierra Nevada without excluding NPS and Wildeness area. the white areas indicate the no data(no biomass)
+  fl.ele.mask <<-raster(file.path(root_dir, "Sierra_Navada_Clusters/new_test/fl_ele_Sierra.tif"))# this is the new forest elevation data in Sierra Nevada without excluding NPS and Wildeness area. the white areas indicate the no data(no biomass)
   df.ele <<- rasterToPoints(fl.ele.mask, spatial=T)#total number70857636
   
   log("read the shapefile of county boundary of Sierra Nevada")
