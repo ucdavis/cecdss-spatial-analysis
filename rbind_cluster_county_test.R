@@ -17,7 +17,7 @@ source("shared/forest_type.R")# useless
 source("shared/data.R")# useless
 source("shared/cluster_results_new.R")#useless
 
-# loads F3 forest, elevation, sit raster,stack all F3 forest data with sit data,and chwrite.csv(final_csv,"/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/county_csv/Sorted_Sierra_Nevada.csv")ange the variable name to simple name
+# loads F3 forest, elevation, sit raster,stack all F3 forest data with sit data,and write final_csv to Sorted_Sierra_Nevada.csv") and change the variable name to simple name
 load_forest_data <- function(){
   log("loading forest data")
   fl <<- list.files(pattern=glob2rx("Total*.tif$")) # list all the F3 Data  There are total of 60 files 
@@ -56,7 +56,7 @@ write_ele_biomass_in_county = function(){
   F3_ele_biomass_df=as.data.frame(df.data.curr_county.latlon)
   
   log("Writing into csv file")
-  directory <- paste("/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs")
+  directory <- paste(file.path(root_dir, "Sierra_Navada_Clusters/final_csvs"))
   write.csv(F3_ele_biomass_df, paste(directory,"/F3_ele_biomass.csv",sep = ""))#this table includes the elevation,county name,a bunch of variables realted to biomass.
 }
 
@@ -73,7 +73,7 @@ main()
 #running the rest of code to join the pixel data with cluster data and forest type data
 
 print("reading the table produced in the function of write_ele_biomass_in_county")
-fl_sierra=read.csv("/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/F3_ele_biomass.csv")#here I read the csv file we create in the fuction of write_ele_biomass_in_county. if you didn't write csv in the second function, you can directly use the variable name F3_ele_biomass_df
+fl_sierra=read.csv(file.path(root_dir, "Sierra_Navada_Clusters/final_csvs/F3_ele_biomass.csv"))#here I read the csv file we create in the fuction of write_ele_biomass_in_county. if you didn't write csv in the second function, you can directly use the variable name F3_ele_biomass_df
 fl_sierra[is.na(fl_sierra)]=0 
 #change the column name
 colnames(fl_sierra)[2]="elevation"
@@ -83,10 +83,10 @@ colnames(fl_sierra)[67]="lng"
 colnames(fl_sierra)[68]="lat"
 #read the forest type csv this is another information realted to forst type needed to add to the dataframe
 print("reading the forest type table in Whole Sierra")
-forest_type=read.csv("/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/forest_type_Sierra_wgs.csv")
+forest_type=read.csv(file.path(root_dir, "Sierra_Navada_Clusters/final_csvs/forest_type_Sierra_wgs.csv"))
 #read the shapefile of the cluster in whole Sierra
 print("reading the cluster in whole Sierra ") #read the cluster results for whole sierra Neveda that we created in ArcMap
-Sierra_grid_cluster=shapefile("/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/new_test/cluster_final_Sierra.shp")
+Sierra_grid_cluster=shapefile(file.path(root_dir, "Sierra_Navada_Clusters/new_test/cluster_final_Sierra.shp"))
 
 #list a total of 21 counties in Sierra Nevada
 counties=c("Alpine","Yuba","Inyo","Madera","Mariposa","Tehama","Calaveras","Nevada","Shasta","Plumas","Lassen","Sierra","Placer","Butte","Amador","El Dorado","Tulare","Tuolumne","Mono","Fresno","Kern")
@@ -139,4 +139,4 @@ results=foreach(county_name=counties)%dopar%{#parally processing the pixel data 
 results_final=do.call(rbind,results)#combine the pixel associated with each county
 print("write the csv")
 final_csv=arrange(results_final, desc(as.numeric(as.character(cluster_no))))#I changed this code
-write.csv(final_csv,"/gpfs/data1/cmongp/lansong/cec_lan/Sierra_Navada_Clusters/final_csvs/county_csv/Sorted_Sierra_Nevada.csv")
+write.csv(final_csv,file.path(root_dir, "Sierra_Navada_Clusters/final_csvs/county_csv/Sorted_Sierra_Nevada.csv"))
