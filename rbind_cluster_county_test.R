@@ -39,7 +39,7 @@ write_ele_biomass_in_county = function(){
   df.ele <<- rasterToPoints(fl.ele.mask, spatial=T)#total number70857636
   
   log("read the shapefile of county boundary of Sierra Nevada")
-  shp <<- shapefile("/gpfs/data1/cmongp/ujjwal/cec/Forest Data/CA_Counties/CA_Sierra_TIGER2016.shp")#this is county boundary shapefile
+  shp <<- shapefile(file.path(data_dir, "CA_Counties/CA_Sierra_TIGER2016.shp"))#this is county boundary shapefile
   shp.curr_county.prj <- spTransform(shp, proj4string(fl.ele))#convert to the same project 
   
   log("Getting county's elevation data for Whole Sierra")
