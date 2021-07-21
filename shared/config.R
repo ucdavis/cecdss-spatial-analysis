@@ -10,7 +10,8 @@ load_libraries <- function(){
 
 #root_dir = "/gpfs/data1/cmongp/ujjwal/cec/cec_mod"
 root_dir ="/gpfs/data1/cmongp/lansong/cec_lan" # This is the directory which your scripts are saved, change to your own path
-data_dir ="/gpfs/data1/cmongp/ujjwal/cec/Forest Data/" # This is the directory which your data is located, change to your own path 
+data_dir ="/gpfs/data1/cmongp/ujjwal/cec/Forest Data/" # This is the directory which your data is located, change to your own path
+results_dir="/gpfs/data1/cmongp/lansong/cec_lan/results" # this is where the results will be saved, change to your own path
 setup <- function(num_clusters=10){
   load_libraries()
   rasterOptions(maxmemory = 10e+9, chunksize = 10e+08) # comment this out if the machine is not powerful enough
