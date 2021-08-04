@@ -20,7 +20,7 @@ source("shared/cluster_results_new.R")#useless
 setup()# This is the function in the Config.R
 
 # load elevation raster data
-fl.ele <<- load_preproc_raster(file.path(data_dir, "ele_raster.tif")) # "Read our original elevation data, load_preproc_raster" is the function from cec_utils.R
+fl.ele <<- raster(file.path(data_dir, "ele_raster.tif")) # "Read our original elevation data, load_preproc_raster" is the function from cec_utils.R
 
 #running the rest of code to join the pixel data with cluster data and forest type data
 
@@ -86,7 +86,7 @@ results=foreach(county_name=counties)%dopar%{#parally processing the pixel data 
   data_clean1$year=rep("2016",nrow(data_clean1))
 
   # write csv for this county
-  write.csv(final_csv,file.path(results_dir, paste(county_name, "_sorted.csv", sep="")))
+  write.csv(data_clean1,file.path(results_dir, paste(county_name, "_sorted.csv", sep="")))
 
   print("rbind the datasets")
   df_total=rbind(df_total,data_clean1)
