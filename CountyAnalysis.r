@@ -91,31 +91,31 @@ if (!file.exists(cnt_filename)) {
   rst1[is.na(rst1)] = 0
   rst2 = subset(rst1, rst1$californiaclusters > 0)
 
-  print("raster -> point conversion complete")
-
   cal1 = projectRaster(cal, crs = '+proj=longlat +datum=WGS84 +no_defs', method = "ngb") # reprojecting california id raster
   cal2 = data.frame(rasterToPoints(cal1))
+  colnames(cal2) <- c('x', 'y', 'calid') # change column names so we don't get a conflict
 
-  print("reprojection to WGS84 complete")
-
-  rst3 = sqldf('select * from rst2 LEFT JOIN cal2 ON rst2.calid=cal2.calID')
+  rst3 = sqldf('select * from rst2 LEFT JOIN cal2 ON rst2.calid=cal2.calid')
   rst3 = rst3[c(-1, -2, -3)]
   rst3 = sqldf('select * from rst3 LEFT JOIN Hzrd ON rst3.hazard=Hzrd.haz_class')
   rst3 = sqldf('select * from rst3 LEFT JOIN Frst ON rst3.sierrafrst=Frst.Frst_code')
   rst3 = sqldf('select * from rst3 LEFT JOIN landOwn ON rst3.landownship=landOwn.Lnd_code')
   rst3$cnt = cnt$NAME
-  rst3$year = 2016
+  rst3$year = year
   colnames(rst3)[67] = "lng"
   colnames(rst3)[68] = "lat"
   colnames(rst3)[3] = "site_class"
   colnames(rst3)[1] = "cluster_no"
   rst4 = rst3[c(67, 68, 1:3, 76, 77, 70:75, 7:66)]
-  #rst5 <- rapply(object = rst4, f = round, classes = "numeric", how = "replace", digits = 2) 
+  # TODO: should we round to 2 digits? probably not right?
+  # rst5 <- rapply(object = rst4, f = round, classes = "numeric", how = "replace", digits = 2) 
   colnames(rst4)[9] = "haz_name"
   #colnames(rst5)[6]="county_name"
-  rst4 <- rst4[order(rst5$cluster_no),]
-  rst4 = subset(rst4, rst4$ba_15 != 0)
-
+  # SRK: replaced this with line below since rst5 is not defined
+  # rst4 <- rst4[order(rst5$cluster_no), ]
+  rst4 <- rst4[order(rst4$cluster_no),]
+  rst4 = subset(rst4, rst4$ba_15 != 0) 
+  
   print("dataframe creation complete, writing result")
 
   write.csv(rst4, paste0(cnt$NAME, "_clusterData.csv"))
