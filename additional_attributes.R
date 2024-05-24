@@ -83,10 +83,10 @@ for (i in 1:num_groups) {
 
   print_timestamped("Preparing for and extracting FSHZ")  
   #project coords to fire hazard data
-  coords_FSHZ = project(coords_vect,fireData)
+  coords_FHSZ = project(coords_vect,fireData)
   
-  #extract FSHZ
-  hazardExtracted = extract(fireData,coords_FSHZ)
+  #extract FHSZ
+  hazardExtracted = extract(fireData,coords_FHSZ)
   
   #add FSHZ to table
   GLRBT_group$Hazard_Class = hazardExtracted$FHSZ
